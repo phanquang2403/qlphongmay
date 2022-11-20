@@ -25,6 +25,44 @@ td, th {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+.box-add-prod{
+  
+}
+
+.btn-add-prod{
+    margin-top:1rem;
+    padding: 8px 15px;
+    border-radius: 8px;
+}
+
+.add_product{
+    border:1px solid red;
+    border-radius: 8px;
+    padding: 1rem 4rem;
+    width: max-content;
+    margin-top:1rem;
+    display:none;
+
+}
+
+.form-box{
+    display: flex;
+    flex-direction: column;
+    width: 50rem;
+}
+
+.wrapper-btn{
+    margin-top: 1rem;
+    
+}
+
+.btn-form{
+        padding: 8px 15px;
+        border-radius: 8px;
+        margin: 0 0.5rem;
+    }
+
 </style>
 </head>
 <body class="hold-transition sidebar-mini layout-boxed">
@@ -165,6 +203,79 @@ tr:nth-child(even) {
       <div class="container-fluid">
         <div class="row">
           <div class="col-12">
+            <div class="box-add-prod">
+            <button class='btn-add-prod'>Nhập vật tư</button>
+
+            <div class='add_product'>
+                <form action="trangvattu.php" method='post' >
+                   
+                    <div class="form-box">
+                        <label for="name_prod">Tên vật tư</label>
+                        <input name='name_prod' type="text" id='name_prod'>
+                    </div>
+
+                    <div class="form-box">
+                        <label for="code_prod">Mã mã loại</label>
+                        <select name="code_prod" id="code_prod">
+                        <?php 
+                            $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
+                            $sql ="SELECT * FROM `loaitbvt`";
+                            $query = mysqli_query($connect, $sql);
+                            while ($row = mysqli_fetch_assoc($query)){
+
+                        ?>
+                            <option value=<?php echo $row['maloai'] ?>><?php echo $row['tenloai'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+
+                    <div class="form-box">
+                        <label for="count_prod">Số lượng</label>
+                        <input name='count_prod' type="text" id='count_prod'>
+                    </div>
+                    <div class="wrapper-btn">
+                        <button class='btn-form' name='add_prod_btn' type="submit">Thêm sản Phẩm</button>
+                        <button class='btn-form' type="">Huỷ bỏ</button>
+                    </div>
+
+                    <?php 
+                        if(isset($_POST['add_prod_btn'])){
+
+                            if(!empty($_POST['name_prod']) &&  !empty($_POST['count_prod'])){
+
+                                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                                $date       =   date("Y-m-d H:i:s");
+                                $mahang     =   'MH'.str_replace(':','',str_replace('-','',str_replace(' ', '', $date)));
+                                $name = $_POST['name_prod'];
+                                $code = $_POST['code_prod'];
+                                $count  =$_POST['count_prod'];
+
+
+                                $sql        ="INSERT INTO `thietbivt` (`mavt`,`maphong`,`tenvt`, `maloai`, `soluong`,`ngaynhap`,tengv) VALUES ('$mahang','maphong1','$name','$code',$count,'$date','Bình giang')";
+                                $kq =    mysqli_query($connect,$sql);
+                                if($kq){
+                                    echo "
+                                    <script type='text/javascript'>               
+                                        alert(' Nhập hàng thành công'); 
+                                    </script>
+                                    ";  
+                                }else{
+                                    echo "
+                                    <script type='text/javascript'>               
+                                        alert(' Nhập hàng không thành công'); 
+                                        
+                                    </script>
+                                    ";  
+                                }
+                        }
+
+                        }
+                    ?>
+                    
+                </form>
+                
+            </div>
+            </div>
 
 
 
@@ -279,6 +390,16 @@ die('Không thể kết nối Database:' .mysql_error());
     <strong><a href="https://adminlte.io"></a>Đăng Giang</strong>
 
 </div>
+
+<script>
+    let box_add =  document.querySelector('.add_product')
+    let btnAddProd =  document.querySelector('.btn-add-prod')
+
+    btnAddProd.addEventListener("click", () => {
+        console.log(1)
+        box_add.style.display= 'block';
+    });
+</script>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/adminlte.min.js"></script>

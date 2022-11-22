@@ -1,5 +1,5 @@
 
-    <select class='fullWidth customSelect' name="code_type" id="name_prod">
+    <select class='fullWidth customSelect' name="mavt" id="name_prod">
 
 <?php 
 

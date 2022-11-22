@@ -77,7 +77,10 @@
     .customSelect {
         padding: 10px 14px;
     }
-    
+    .chan{
+        display: flex;
+    flex-direction: column;
+    }
     /* Change styles for span and cancel button on extra small screens */
     @media screen and (max-width: 300px) {
       span.psw {
@@ -252,7 +255,7 @@
               <div class="container">
               
               <label class='fullWidth' for="name_prod" >Tên loại</label>
-                <select class='fullWidth customSelect' name="code_prod" id="name_type">
+                <select class='fullWidth customSelect' name="maloai" id="name_type">
 
                     <?php 
                     $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
@@ -260,7 +263,7 @@
                     $query = mysqli_query($connect, $sql);
                     while ($row = mysqli_fetch_assoc($query)){
                     ?>
-                        <option value=<?php echo $row['maloai'] ?>><?php echo $row['tenloai'] ?></option>
+                        <option value=<?php echo $row['maloai']?>><?php echo $row['tenloai'] ?></option>
                     <?php } ?>
                     </select>
 
@@ -268,7 +271,7 @@
                 <label class='fullWidth' for="name_prod" >Tên vật tư</label>
                 <div id='adad'>
 
-                <select class='fullWidth customSelect' name="code_type" id="name_prod">
+                <select class='fullWidth customSelect' name="mavt" id="name_prod">
 
                     <?php 
 
@@ -280,7 +283,7 @@
                         $query = mysqli_query($connect, $sql);
                         while ($row = mysqli_fetch_assoc($query)){
                         ?>
-                            <option value=<?php echo $row['mavt'] ?>><?php echo $row['tenvt'] ?></option>
+                            <option value=<?php echo $row['mavt']; ?>><?php echo $row['tenvt'] ?></option>
                         <?php }?>
 
 
@@ -314,12 +317,14 @@
                 
 
               
-                <label for="uname"><b>số lượng</b></label>
-                <input type="text"  name="soluong"  value="" required>
+               <div class='chan'>
+               <label for="uname" class="fullWidth"><b>số lượng</b></label>
+                <input type="number"  name="soluong"  value="" required>
+               </div>
 
                 <label class='fullWidth' for="name_prod" >Giảng viên</label>
 
-                <select class='fullWidth customSelect' name="" id="name_prod">
+                <select class='fullWidth customSelect' name="magv" id="name_prod">
 
                     <?php 
                     $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
@@ -328,7 +333,7 @@
                     while ($row = mysqli_fetch_assoc($query)){
 
                     ?>
-                    <option value=<?php echo $row['magv'] ?>><?php echo $row['tengv'] ?></option>
+                    <option value=<?php echo $row['magv']." ".$row['tengv'] ?>><?php echo $row['tengv'] ?></option>
                     <?php } ?>
                 </select>
 

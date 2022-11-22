@@ -5,40 +5,52 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
             $mavt=$_POST["mavt"];
         
 
-            $tenvt=$_POST["tenvt"];
-            $maloai=$_POST["maloai"];
+            $tenvt=$_POST["mavt"];
+            $maloai=$_POST["maloai"]; 
             $soluong=$_POST["soluong"];
             $t_maphong = $_POST["maphong"];      
-            $nguoigiao = $_POST['tengv'];
+            $nguoigiao = $_POST['magv']; 
             $date= date("Y-m-d H:i:s");
             $r="select * from thietbivt where mavt = '$mavt'";
+
             $mavattu=mysqli_query($connect,$r);
-            $a = mysqli_fetch_array($mavattu);
-        if( $a['mavt'] != null){
+            $tenvattu =mysqli_fetch_assoc($mavattu)['tenvt'];
+
+
+            $other_ship = "SELECT * FROM `giangvien` where magv='$nguoigiao'";
+            $query_ship_order=mysqli_query($connect,$other_ship);
+            $data_ship =mysqli_fetch_assoc($query_ship_order)['tengv'];
+            echo $data_ship;
+
+            if( $b=mysqli_num_rows($mavattu)<=0){
            
            
                     echo "   <script>
                
                     window.location='trangdanhsach.php';
-                    window.alert('Mã vật tư trùng nhau!');
+                    window.alert('vật tư này chưa tồn tại!');
                 
-            //     </script>";
+                 </script>";
         
 
     
         }  else{
-            $sql = "INSERT INTO thietbivt (mavt, maphong, tenvt,maloai,soluong,tengv,ngaynhap) 
-            VALUES ('$mavt','$t_maphong','$tenvt','$maloai','$soluong','$nguoigiao','$date') ";
+            $sqlUpdate ="UPDATE `thietbivt` SET `mavt`='$mavt',`maphong`='$t_maphong',`tenvt`='$tenvattu',`maloai`='$maloai',`soluong`=soluong + $soluong,`tengv`='$data_ship',`ngaynhap`='$date' WHERE mavt='$mavt'";
+            $a = mysqli_query($connect,$sqlUpdate);
+            
+            
+            
             
             //phieunhan
+            echo $sqlUpdate;
             $sqli = "INSERT INTO phieunhan (ngaynhan, nguoigiao) 
-            VALUES ('$date','$nguoigiao') ";
+            VALUES ('$date','$data_ship') ";
             mysqli_query($connect,$sqli);
     
             //chitiet nhan
                 
                 $r = "INSERT INTO chitietnhan ( tenvt, Soluongnhan, trinhtangvattu) 
-                VALUES ('$tenvt','$soluong', 'moi') ";
+                VALUES ('$tenvattu','$soluong', 'moi') ";
             mysqli_query($connect,$r);
             echo "   <script>
             

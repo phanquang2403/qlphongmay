@@ -69,6 +69,14 @@
       float: right;
       padding-top: 16px;
     }
+
+    .fullWidth{
+        display: block;
+        width: 100%;
+    }
+    .customSelect {
+        padding: 10px 14px;
+    }
     
     /* Change styles for span and cancel button on extra small screens */
     @media screen and (max-width: 300px) {
@@ -223,40 +231,107 @@
 
 
 
-  <?php 
+            <?php 
  
- if (isset($_GET["id"])){
-  $id = $_GET["id"];
+                if (isset($_GET["id"])){
+                    $id = $_GET["id"];
+                }
+                
+                $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
+                $sql ="SELECT * FROM phongmay where id= $id ";
 
-}
-  
-  $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
-  $sql ="SELECT * FROM phongmay where id= $id ";
-
-$query = mysqli_query($connect, $sql);
-$row = mysqli_fetch_assoc($query);
-$maphong = $row["maphong"];
-?> 
+                $query = mysqli_query($connect, $sql);
+                $row = mysqli_fetch_assoc($query);
+                $maphong = $row["maphong"];
+            ?> 
             <form  method="POST" action="XL_nhapvattu.php">
               <div class="imgcontainer">
               <h1>    Nhập vật tư --> <?php echo $maphong ;?>  </h1>
               </div>
             
               <div class="container">
-                <label for="uname"><b>mã vật tư</b></label>
-                <input type="text"  name="mavt" value="" required>
-            
-                <label for="psw"><b>tên vật tư</b></label>
-                <input type="text" name="tenvt"  value="" required>
+              
+              <label class='fullWidth' for="name_prod" >Tên loại</label>
+                <select class='fullWidth customSelect' name="code_prod" id="name_type">
 
-                <label for="uname"><b>mã loại </b></label>
-                <input type="text" name="maloai"  value="" required>
+                    <?php 
+                    $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
+                    $sql ="SELECT * FROM `loaitbvt`";
+                    $query = mysqli_query($connect, $sql);
+                    while ($row = mysqli_fetch_assoc($query)){
+                    ?>
+                        <option value=<?php echo $row['maloai'] ?>><?php echo $row['tenloai'] ?></option>
+                    <?php } ?>
+                    </select>
 
+
+                <label class='fullWidth' for="name_prod" >Tên vật tư</label>
+                <div id='adad'>
+
+                <select class='fullWidth customSelect' name="code_type" id="name_prod">
+
+                    <?php 
+
+                      
+
+                        $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
+                        $sql ="SELECT * FROM `thietbivt`";
+                        echo $sql;
+                        $query = mysqli_query($connect, $sql);
+                        while ($row = mysqli_fetch_assoc($query)){
+                        ?>
+                            <option value=<?php echo $row['mavt'] ?>><?php echo $row['tenvt'] ?></option>
+                        <?php }?>
+
+
+                    </select>
+                </div>
+                <script>
+                        const a = document.getElementById("name_type")
+                        const b = document.getElementById("adad")
+                        var value = 'ml01'
+                        a.addEventListener('change',(e) => {
+                            value = e.target.value;
+                            $.ajax({
+                                method: "POST",
+                                url: "getData.php",
+                                data:{
+                                    value
+                                },
+                                success : function(response){
+                                    b.innerHTML  = response
+                                }
+                            });
+                           
+                        })
+                     
+                    
+                    </script>
+                        </select>
+                </select>
+
+
+                
+
+              
                 <label for="uname"><b>số lượng</b></label>
                 <input type="text"  name="soluong"  value="" required>
 
-                <label for="uname"><b>Giảng viên</b></label>
-                <input type="text"  name="tengv"  value="" required>
+                <label class='fullWidth' for="name_prod" >Giảng viên</label>
+
+                <select class='fullWidth customSelect' name="" id="name_prod">
+
+                    <?php 
+                    $connect = mysqli_connect ('localhost','root','','qlphongmay') or die("lỗi");
+                    $sql ="SELECT * FROM `giangvien`";
+                    $query = mysqli_query($connect, $sql);
+                    while ($row = mysqli_fetch_assoc($query)){
+
+                    ?>
+                    <option value=<?php echo $row['magv'] ?>><?php echo $row['tengv'] ?></option>
+                    <?php } ?>
+                </select>
+
             
                 <label for="uname"><b>Ma phòng</b></label>
                 <input type="text"  name="maphong"  value="<?php echo $maphong;?> " placeholder="<?php echo $maphong;?>"readonly >
@@ -283,6 +358,10 @@ $maphong = $row["maphong"];
     <strong><a href="https://adminlte.io"></a>Đăng Giang</strong>
 
 </div>
+<script
+  src="https://code.jquery.com/jquery-3.6.1.js"
+  integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+  crossorigin="anonymous"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.bundle.min.js"></script>
 <script src="js/adminlte.min.js"></script>
